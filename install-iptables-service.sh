@@ -5,6 +5,8 @@
 cat <<EOSH | tee $SCRIPT_FILE
 #!/bin/bash
 
+sleep 10
+
 # Enable IP forwarding (if not already done)
 echo 1 > /proc/sys/net/ipv4/ip_forward
 sysctl -w net.ipv4.ip_forward=1
@@ -23,7 +25,7 @@ chmod +x $SCRIPT_FILE
 cat <<EOF | tee $SERVICE_FILE
 [Unit]
 Description=OpenVPN custom iptables rules
-After=network-online.target docker.service
+After=network-online.target openvpn-server@server.service
 Wants=network-online.target
 
 [Service]
