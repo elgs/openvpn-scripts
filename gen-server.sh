@@ -21,6 +21,9 @@ easyrsa --batch build-client-full myclient nopass
 # Generate Diffie-Hellman parameters
 easyrsa gen-dh
 
+# Generate tls-crypt-v2 master key
+openvpn --genkey tls-crypt-v2-server $OVPN_SERVER_DIR/tls-crypt-v2-master.key
+
 # Copy required files to OpenVPN server directory
 cp $EASYRSA_DIR/pki/ca.crt $OVPN_SERVER_DIR/
 cp $EASYRSA_DIR/pki/issued/myserver.crt $OVPN_SERVER_DIR/
@@ -32,6 +35,8 @@ cp $EASYRSA_DIR/pki/private/myclient.key $OVPN_SERVER_DIR/
 # Set permissions
 chown openvpn:openvpn $OVPN_SERVER_DIR/*.crt $OVPN_SERVER_DIR/*.key $OVPN_SERVER_DIR/dh.pem
 chmod 600 $OVPN_SERVER_DIR/*.key
+chmod 600 $OVPN_SERVER_DIR/tls-crypt-v2-master.key
+chown openvpn:openvpn $OVPN_SERVER_DIR/tls-crypt-v2-master.key
 
 # Inline server.conf creation using variables
 cat > $OVPN_SERVER_DIR/server.conf <<EOF
@@ -42,13 +47,18 @@ ca ca.crt
 cert myserver.crt
 key myserver.key
 dh dh.pem
+tls-crypt-v2 tls-crypt-v2-master.key
 server ${OVPN_SUBNET}
 topology subnet
 ifconfig-pool-persist ipp.txt
 push "dhcp-option DNS 8.8.8.8"
-push "redirect-gateway def1 bypass-dhcp ipv6"
+push "redirect-gateway def1 bypass-dhcp"
 push "route ${LAN_SUBNET}"
 keepalive 10 120
+tls-version-min 1.2
+tls-cipher TLS-ECDHE-ECDSA-WITH-AES-256-GCM-SHA384:TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384
+cipher AES-256-GCM
+auth SHA256
 persist-key
 persist-tun
 verb 3
@@ -58,5 +68,9 @@ echo "All certificates, keys, and server.conf have been reset and copied."
 echo "Update your client.ovpn as needed."
 
 # Enable and start the OpenVPN server service
-systemctl enable --now openvpn-server@server.service
+if systemctl is-active --quiet openvpn-server@server.service; then
+  systemctl restart openvpn-server@server.service
+else
+  systemctl start openvpn-server@server.service
+fi
 echo "OpenVPN server service has been enabled and started."

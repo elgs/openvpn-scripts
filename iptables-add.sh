@@ -41,4 +41,10 @@ EOF
 systemctl daemon-reload
 systemctl enable --now openvpn-iptables.service
 
+if systemctl is-active --quiet openvpn-iptables.service; then
+  systemctl restart openvpn-iptables.service
+else
+  systemctl start openvpn-iptables.service
+fi
+
 echo "Systemd service openvpn-iptables.service installed and started."

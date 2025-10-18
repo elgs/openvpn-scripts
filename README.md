@@ -4,10 +4,10 @@ This repository provides scripts to automate the setup, configuration, and manag
 
 ## Scripts Overview
 
-- **install-server.sh**: Automates PKI initialization, certificate/key generation, server.conf creation, and starts the OpenVPN server service.
+- **gen-server.sh**: Automates PKI initialization, certificate/key generation, server.conf creation, and starts the OpenVPN server service.
 - **gen-client.sh**: Generates a client configuration file (`client.ovpn`) with embedded certificates and keys for easy import into OpenVPN clients.
-- **install-iptables-service.sh**: Installs a systemd service to automatically set up iptables rules for OpenVPN traffic on boot.
-- **remove-iptables-service.sh**: Removes the systemd iptables service and its script.
+- **iptables-add.sh**: Adds iptables rules for OpenVPN traffic.
+- **iptables-remove.sh**: Removes iptables rules for OpenVPN traffic.
 
 ## Environment Configuration
 
@@ -33,10 +33,10 @@ export SCRIPT_FILE="/etc/openvpn/server/openvpn-iptables.sh"
 1. **Edit `.envrc`**
    - Set all variables to match your environment.
 
-2. **Install and start OpenVPN server:**
+2. **Generate and start OpenVPN server:**
    ```sh
    source .envrc
-   sudo ./install-server.sh
+   sudo ./gen-server.sh
    ```
 
 3. **Generate client configuration:**
@@ -46,16 +46,16 @@ export SCRIPT_FILE="/etc/openvpn/server/openvpn-iptables.sh"
    # The file client.ovpn will be created
    ```
 
-4. **Install OpenVPN iptables systemd service:**
+4. **Add OpenVPN iptables rules:**
    ```sh
    source .envrc
-   sudo ./install-iptables-service.sh
+   sudo ./iptables-add.sh
    ```
 
-5. **Remove OpenVPN iptables systemd service:**
+5. **Remove OpenVPN iptables rules:**
    ```sh
    source .envrc
-   sudo ./remove-iptables-service.sh
+   sudo ./iptables-remove.sh
    ```
 
 ## Notes
