@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 
 openvpn --tls-crypt-v2 $OVPN_SERVER_DIR/tls-crypt-v2-master.key --genkey tls-crypt-v2-client $OVPN_SERVER_DIR/${CLIENT_NAME}-tls-crypt-v2.key
 

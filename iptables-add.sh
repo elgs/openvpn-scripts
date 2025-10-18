@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 # Script to install a systemd service for OpenVPN iptables rules
 
 # Create the openvpn-iptables.sh script

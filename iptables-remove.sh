@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 # Script to remove the OpenVPN iptables systemd service and script
 
 # Stop and disable the systemd service if it exists
