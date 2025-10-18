@@ -15,7 +15,7 @@ All scripts use environment variables defined in `.envrc`. Edit this file to mat
 
 ```sh
 export OVPN_PORT=443
-export OVPN_PROTO=tcp
+export OVPN_PROTO=udp
 export OVPN_SUBNET="10.0.0.0 255.255.255.0"
 export OVPN_SUBNET_CIDR="10.0.0.0/24"
 export LAN_SUBNET="192.168.1.0 255.255.255.0"
