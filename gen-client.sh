@@ -32,3 +32,4 @@ $(cat $OVPN_SERVER_DIR/${CLIENT_NAME}-tls-crypt-v2.key)
 EOF
 
 echo "client.ovpn generated with embedded certs and key."
+rm -f $OVPN_SERVER_DIR/${CLIENT_NAME}-tls-crypt-v2.key
